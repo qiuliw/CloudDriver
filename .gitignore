@@ -1,4 +1,5 @@
 build/
+bin/
 out/
 debug/
 .cache/
@@ -7,3 +8,5 @@ debug/
 .vscode/
 cmake-build-debug/
 .clion/
+.clion-debug/
+lib/

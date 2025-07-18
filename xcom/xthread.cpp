@@ -150,7 +150,6 @@ bool XThread::Run() {
     return true;
 }
 
-
 // 给线程添加task
 void XThread::AddTask(XTask *task)
 {

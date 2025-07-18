@@ -1,5 +1,6 @@
 #pragma once
 
+#include "xcom.h"
 #include <mutex>
 #include <vector>
 
@@ -10,9 +11,9 @@ class XThreadPool {
 public:
     ~XThreadPool();
 
-    static XThreadPool* Get();
+    XCOM_API static XThreadPool* Get();
     // 创建好线程XThread对象
-    bool Init(int threadCount = 10);
+    XCOM_API bool Init(int threadCount = 10);
     // 分配任务到线程，使用基础轮询算法
     // 每个线程处理多个任务
     // 添加任务 XTask

@@ -18,3 +18,6 @@ else()
     include_directories(${LIBEVENT_INCLUDE_DIRS})
     target_link_libraries(xdisk_server PRIVATE Libevent::libevent)
 endif()
+
+# link xcom
+target_link_libraries(xdisk_server PRIVATE xcom)

@@ -29,4 +29,7 @@ int main(int argc, char *argv[] ){
     if(argc == 1)
         std::cout << "Usage: " << argv[0] << " [server_port] [thread_count]" << std::endl;
 
+    XThreadPool::Get()->Init(thread_count);
+    
+
 }

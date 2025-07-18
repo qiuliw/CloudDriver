@@ -1,0 +1,9 @@
+build/
+out/
+debug/
+.cache/
+.vs/
+.idea/
+.vscode/
+cmake-build-debug/
+.clion/

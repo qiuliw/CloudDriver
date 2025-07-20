@@ -9,7 +9,8 @@ class XTask;
 
 class XThreadPool { 
 public:
-    ~XThreadPool();
+    XCOM_API XThreadPool();
+    XCOM_API ~XThreadPool();
 
     XCOM_API static XThreadPool* Get();
     // 创建好线程XThread对象
@@ -18,10 +19,9 @@ public:
     // 每个线程处理多个任务
     // 添加任务 XTask
     // 激活线程去处理
-    void Dispatch(XTask *task);
-    XThread *GetThread();
+    XCOM_API void Dispatch(XTask *task);
+    XCOM_API XThread *GetThread();
 private:
-    XThreadPool();
 
     // 线程数量
     int thread_count_ = 0;

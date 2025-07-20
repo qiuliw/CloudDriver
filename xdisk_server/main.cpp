@@ -1,4 +1,6 @@
 #include <iostream>
+#include <thread>
+#include <winsock2.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -6,7 +8,14 @@
 #include <signal.h>
 #endif
 
-#include <xthread_pool.h>
+#include "xthread_pool.h"
+#include "xserver_task.h"
+
+
+static void ListenCB(int sock,struct sockaddr *addr, int addrlen, void *arg){
+    std::cout << "ListenCB in main" << std::endl;
+}
+
 
 int main(int argc, char *argv[] ){
 
@@ -29,7 +38,17 @@ int main(int argc, char *argv[] ){
     if(argc == 1)
         std::cout << "Usage: " << argv[0] << " [server_port] [thread_count]" << std::endl;
 
+    // 初始化主线程池
     XThreadPool::Get()->Init(thread_count);
     
-
+    // 服务器分发连接的线程池
+    XThreadPool server_pool;
+    server_pool.Init(1);
+    auto task = new XServerTask();
+    task->set_server_port(server_port);
+    task->listen_cb_ = ListenCB;
+    server_pool.Dispatch(task);
+    for(;;){
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
 }

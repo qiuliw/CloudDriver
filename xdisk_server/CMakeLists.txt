@@ -16,7 +16,7 @@ if(WIN32)
 else()
     find_package(Libevent REQUIRED)
     include_directories(${LIBEVENT_INCLUDE_DIRS})
-    target_link_libraries(xdisk_server PRIVATE Libevent::libevent)
+    target_link_libraries(xdisk_server PRIVATE Libevent::libevent) # PRIVATE cmake提供链接的传递性，编译后提供libevent.cmake文件，给链接的cmake项目。gcc本身不提供
 endif()
 
 # link xcom

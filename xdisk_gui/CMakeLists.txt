@@ -68,3 +68,6 @@ install(TARGETS xdisk_gui
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(xdisk_gui)
 endif()
+
+# link xcom
+target_link_libraries(xdisk_gui PRIVATE xcom)

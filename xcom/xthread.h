@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "XTask.h"
+#include "xcom.h"
 
 class XThread {
 public:

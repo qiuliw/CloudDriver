@@ -6,7 +6,6 @@
 #include <cstring>
 #include <event2/event_compat.h>
 #include <mutex>
-#include <unistd.h>
 #include <event2/event.h>
 #include <iostream>
 #include <thread>
@@ -25,7 +24,7 @@ static void NotifyCB(evutil_socket_t fd, short which, void *arg){
     if(!re)
         return;
     
-    std::cout << t->tId_ << ": 线程被唤醒，NotifyCB " << std::endl;
+    std::cout << t->tId_ << ": thread is notifyed，NotifyCB " << std::endl;
 }
 
 XThread::XThread() {

@@ -18,5 +18,5 @@ include_directories(${PROJECT_SOURCE_DIR}/xcom)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
 add_subdirectory(xcom)
-add_subdirectory(xdisk_gui)
+add_subdirectory(xdisk_gui)  
 add_subdirectory(xdisk_server)

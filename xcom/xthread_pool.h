@@ -7,20 +7,20 @@
 class XThread;
 class XTask;
 
-class XThreadPool { 
+class XCOM_API XThreadPool {
 public:
-    XCOM_API XThreadPool();
-    XCOM_API ~XThreadPool();
+    XThreadPool();
+    ~XThreadPool();
 
-    XCOM_API static XThreadPool* Get();
+    static XThreadPool* Get();
     // 创建好线程XThread对象
-    XCOM_API bool Init(int threadCount = 10);
+    bool Init(int threadCount = 10);
     // 分配任务到线程，使用基础轮询算法
     // 每个线程处理多个任务
     // 添加任务 XTask
     // 激活线程去处理
-    XCOM_API void Dispatch(XTask *task);
-    XCOM_API XThread *GetThread();
+    void Dispatch(XTask *task);
+    XThread *GetThread();
 private:
 
     // 线程数量

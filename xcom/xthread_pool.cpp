@@ -53,6 +53,12 @@ XThread* XThreadPool::GetThread()
 void XThreadPool::Dispatch(XTask *task)
 {
     std::cout << "XThreadPool::Dispatch" << std::endl;
+
+    if (thread_count_ == 0){
+        std::cout << "请先初始化线程池" << std::endl;
+        return;
+    }
+
     // 轮询
     if(!task) return;
     int tid = (last_thread_id_ + 1) % thread_count_;

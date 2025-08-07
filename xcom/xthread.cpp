@@ -67,7 +67,7 @@ bool XThread::InitNotifier() {
 
 }
 
-// 注册管道到base 监听
+// 注册消息管道到base事件轮询去监听
 bool XThread::ListenNotifier(event_base* base, event_callback_fn cb, void* arg) {
     if (!base) {
         fprintf(stderr, "ListenNotifier: base is nullptr\n");
@@ -133,11 +133,12 @@ bool XThread::ReadNotify() {
 #endif
 }
 
-// 读取消息并执行任务
+// 回调：读取消息并执行任务
 bool XThread::Run() {
     if(!ReadNotify()) return true; 
 
     std::unique_lock<std::mutex> lk(tasksMutex_);
+
     XTask* task = nullptr;
     if (tasks_.empty()) {
         return true;
@@ -153,7 +154,7 @@ bool XThread::Run() {
 void XThread::AddTask(XTask *task)
 {
     if(!task)return;
-    task->base_ = base_;
+    task->set_base(base_);
     
     // 添加任务的线程可能和执行任务的线程竞争，需要锁
     std::lock_guard<std::mutex> lk(tasksMutex_);
@@ -161,7 +162,7 @@ void XThread::AddTask(XTask *task)
 }
 
 
-// 初始化通知机制
+// 初始化事件轮询event_base和通知机制
 bool XThread::Setup() {
     if (!InitNotifier()) {
         return false;
@@ -192,7 +193,7 @@ void XThread::Start() {
 void XThread::Main() {
     std::cout << "XThread::Main() begin" << std::endl;
 
-    event_base_dispatch(base_);
+    event_base_dispatch(base_); // 开始轮询
     
     std::cout << "XThread::Main() end" << std::endl;
 }

@@ -73,3 +73,8 @@ endif()
 
 # link xcom
 target_link_libraries(xdisk_gui PRIVATE xcom)
+
+# link win socket
+if(WIN32)
+    target_link_libraries(xdisk_gui PRIVATE ws2_32)
+endif()

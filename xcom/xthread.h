@@ -31,14 +31,14 @@ private:
     bool ListenNotifier(event_base* base, event_callback_fn cb, void* arg);
 
     struct event_base* base_ = nullptr;
-#ifdef _WIN32
-    evutil_socket_t notifyFds_[2] = {0, 0};
-#else
-    int efd_ = -1;
-#endif
 
-    // 任务列表
-    std::list<XTask*> tasks_;
-    // 锁
-    std::mutex tasksMutex_;
+    // 线程间通信管道
+#ifdef _WIN32
+    evutil_socket_t notifyFds_[2] = {0, 0}; // win平台使用socket线程间通信
+#else
+    int efd_ = -1; // linux平台使用eventfd线程间通信
+#endif
+    
+    std::list<XTask*> tasks_; // 任务列表
+    std::mutex tasksMutex_; // 任务列表的锁
 };

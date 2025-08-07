@@ -32,7 +32,7 @@ bool XServerTask::Init()
     sin.sin_port = htons(server_port_);
     // 设置回调函数
     auto evc = evconnlistener_new_bind(
-        base_, // 线程池提供base_ 每个线程池提供一个base_
+        base(), // 线程池提供base_ 每个线程池提供一个base_
         SListenCB, 
         this, 
         LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE, 

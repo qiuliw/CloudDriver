@@ -6,7 +6,10 @@ debug/
 .vs/
 .idea/
 .vscode/
-cmake-build-debug/
+cmake-build-*/
 .clion/
 .clion-debug/
 lib/
+
+CMakeList.txt.user
+widget.ui.autosave

@@ -2,6 +2,11 @@
 #include "./ui_widget.h"
 #include "QMessageBox"
 #include <qfiledialog.h>
+#include <string>
+#include "xdisk_client.h"
+
+using namespace std;
+
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
@@ -16,7 +21,21 @@ Widget::~Widget()
 
 void Widget::Refresh()
 {
-    QMessageBox::information(this,"","Refresh");
+    // QMessageBox::information(this,"","Refresh");
+
+    // 服务器 IP 端口 路径 
+    string ip =  ui->ipEdit->text().toStdString();
+    string root = ui->pathEdit->text().toStdString();
+    int port = ui->portBox->value();
+    XDiskClient *client = XDiskClient::Get();
+    client->set_server_ip(ip);
+    client->set_server_port(port);
+    client->set_server_root(root);
+
+    // 1. 连接服务器
+
+    // 2. 设置回调（NIO）
+    client->GetDir();
 
 }
 

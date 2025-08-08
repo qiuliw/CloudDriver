@@ -1,6 +1,5 @@
-#include <iostream>
+﻿#include <iostream>
 #include <thread>
-#include <winsock2.h>
 
 #ifdef _WIN32
 #include <windows.h>

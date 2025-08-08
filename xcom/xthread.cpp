@@ -1,4 +1,4 @@
-
+﻿
 #include "XThread.h"
 #include "XTask.h"
 #include <cerrno>
@@ -33,6 +33,7 @@ XThread::XThread() {
 
 XThread::~XThread() {
     // 清理资源
+
 #ifdef _WIN32
     if (notifyFds_[0] != INVALID_SOCKET) closesocket(notifyFds_[0]);
     if (notifyFds_[1] != INVALID_SOCKET) closesocket(notifyFds_[1]);

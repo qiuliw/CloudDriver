@@ -7,17 +7,29 @@ aux_source_directory(. SRC_LIST)
 
 add_executable(xdisk_server ${SRC_LIST})
 
-# link libevent
-if(WIN32)
-    set(LIBEVENT_ROOT_DIR "D:/Software/libevent-2.1.12-stable")
-    include_directories("${LIBEVENT_ROOT_DIR}/include" "${LIBEVENT_ROOT_DIR}/build/include")
-    target_link_directories(xdisk_server PUBLIC "${LIBEVENT_ROOT_DIR}/build/lib")
-    target_link_libraries(xdisk_server PRIVATE event ws2_32)
-else()
-    find_package(Libevent REQUIRED)
-    include_directories(${LIBEVENT_INCLUDE_DIRS})
-    target_link_libraries(xdisk_server PRIVATE Libevent::libevent) # PRIVATE cmake提供链接的传递性，编译后提供libevent.cmake文件，给链接的cmake项目。gcc本身不提供
-endif()
 
-# link xcom
-target_link_libraries(xdisk_server PRIVATE xcom)
+include_directories(
+    "${PROJECT_SOURCE_DIR}/../xcom"
+)
+
+# 指定 libevent 路径
+set(LIBEVENT_DIR "D:/Software/libevent-2.1.12-stable")
+
+# 指定 OpenSSL 路径
+set(OPENSSL_ROOT_DIR "D:/Software/openssl-3.5.1")
+
+# 头文件搜索路径
+include_directories(
+        ${LIBEVENT_DIR}/build_msvc_ssl_shared/include # libevent生成的event-config.h文件所在目录，提供跨平台自动选择不同函数和头文件的功能。是event根据系统自动生成的,必须包含
+        ${LIBEVENT_DIR}/include # libevent头文件所在目录，实际供外部调用的头文件
+        ${OPENSSL_ROOT_DIR}/include
+)
+
+# 链接 libevent
+target_link_libraries(xdisk_server
+        "${PROJECT_SOURCE_DIR}/../lib/xcom.lib"
+        "${OPENSSL_ROOT_DIR}/libssl.lib"
+        "${LIBEVENT_DIR}/build_msvc_ssl_shared/lib/Release/event.lib"
+        ws2_32   # Windows 套接字库
+)
+

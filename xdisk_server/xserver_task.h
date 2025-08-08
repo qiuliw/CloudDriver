@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "xtask.h"
 
 typedef void (*ListenCBFunc)(int client_socket, struct sockaddr *sockaddr, int socklen, void *arg);

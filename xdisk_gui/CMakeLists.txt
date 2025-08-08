@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+﻿cmake_minimum_required(VERSION 3.16)
 
 project(xdisk_gui VERSION 0.1 LANGUAGES CXX)
 
@@ -71,10 +71,16 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(xdisk_gui)
 endif()
 
-# link xcom
-target_link_libraries(xdisk_gui PRIVATE xcom)
 
-# link win socket
-if(WIN32)
-    target_link_libraries(xdisk_gui PRIVATE ws2_32)
-endif()
+include_directories(
+    "${PROJECT_SOURCE_DIR}/../xcom"
+    # 查找UI_XXX.h 文件
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_autogen/include # Qt UI 自动生成的头文件路径
+)
+
+target_link_libraries(xdisk_gui PRIVATE 
+    "${PROJECT_SOURCE_DIR}/../lib/xcom.lib"
+    ws2_32
+)
+
+

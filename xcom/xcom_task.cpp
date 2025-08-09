@@ -61,12 +61,7 @@ bool XComTask::Init()
 void XComTask::EventCB(short what){
     cout << "XComTask::EventCB" << endl;
     if (what & BEV_EVENT_CONNECTED){ // 连接成功，客户端主动建立连接时触发
-        cout << "BEV_EVENT_CONNECTED" << endl;
-        auto msg = XMsg();
-        msg.type = MSG_GETDIR;
-        msg.data = (char *) "./";
-        msg.size = strlen(msg.data) + 1;
-        Write(&msg);
+        ConnectedCB();
     }
     if (what & BEV_EVENT_ERROR || what & BEV_EVENT_TIMEOUT){ // 错误
         cout << "BEV_EVENT_ERROR or BEV_EVENT_TIMEOUT" << endl;
@@ -118,6 +113,15 @@ void XComTask::ReadCB(){
         memset(&msg_, 0, sizeof(msg_));
     }
 
+}
+
+// 连接成功回调
+void XComTask::ConnectedCB(){
+    XMsg msg;
+    msg.type = MSG_DIRLIST;
+    msg.data = (char*) "OK";
+    msg.size = strlen(msg.data) + 1;
+    Write(&msg);
 }
 
 bool XComTask::Write(const XMsg* msg){

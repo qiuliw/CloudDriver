@@ -9,6 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_PREFIX_PATH "D:/Software/Qt/6.9.1/msvc2022_64")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -19,6 +20,8 @@ set(PROJECT_SOURCES
         widget.ui
         xdisk_client.cpp
         xdisk_client.h
+        xdir_task.cpp
+        xdir_task.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

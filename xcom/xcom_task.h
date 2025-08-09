@@ -1,10 +1,14 @@
 #pragma once
+#include <functional>
 #include <string>
 #include "xcom.h"
 #include "xtask.h"
 #include "xmsg.h"
 
 struct bufferevent;
+
+
+// 待优化：使用可调用对象替代任务子类。将业务逻辑与任务逻辑解耦
 
 // 对外暴露的socket任务类，连接接受与数据包接受处理函数
 class XCOM_API XComTask : public XTask
@@ -15,6 +19,7 @@ public:
     bool Init() override;
     virtual void EventCB(short what);
     void ReadCB(); // 读取数据包并调用数据处理函数
+    virtual void ConnectedCB(); // 连接成功的消息回调，由业务类重载
     virtual void Read(const XMsg* msg); // 具体的数据处理函数
     virtual bool Write(const XMsg* msg);
 

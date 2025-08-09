@@ -11,12 +11,10 @@
 #include "xserver_task.h"
 #include "xfile_server_task.h"
 
-
-
 // 新连接建立回调函数
 static void ListenCB(int sock,struct sockaddr *addr, int addrlen, void *arg){
     std::cout << "ListenCB in main" << std::endl;
-    auto task = new XFileServerTask();
+    auto task = new XFileServerTask(); // 创建文件服务器任务
     task->set_sock(sock);
     XThreadPool::Get()->Dispatch(task);
 }

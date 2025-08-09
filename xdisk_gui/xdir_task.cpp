@@ -12,8 +12,12 @@ void XDirTask::Read(const XMsg* msg){
     // 接受到服务端发送的目录
     switch (msg->type){
         case MSG_DIRLIST: // 服务器返回的目录列表
+            cout << "MIS_DIRLIST" << endl;
             if (dirCallback_){
                 dirCallback_(msg->data);
+                cout << "dirCallback_" << endl;
+            }else{
+                cout << "dirCallback_ is null" << endl;
             }
             break;
     }

@@ -15,7 +15,7 @@ public:
     void Read(const XMsg* msg) override;
     void ConnectedCB() override;
     void setDirCallback(DirCallback cb){
-        dirCallback_ = std::move(dirCallback_);
+        dirCallback_ = std::move(cb);
     }
 private:
     // 获取目录后调用的回调

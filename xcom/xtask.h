@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+// 任务基类 分发到线程池后Init被回调，base由线程池注入
 class XTask {
 public:
     // 初始化任务

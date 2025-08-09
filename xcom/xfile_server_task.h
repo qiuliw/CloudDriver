@@ -3,6 +3,7 @@
 #include "xcom_task.h"
 
 class XFileServerTask : public XComTask{
+public:
 
 };
 

@@ -4,6 +4,7 @@
 #include <event2/listener.h>
 #include <iostream>
 #include <winsock2.h>
+#include <xfile_server_task.h>
 
 
 // 新连接回调
@@ -16,6 +17,7 @@ static void SListenCB(struct evconnlistener * evc, evutil_socket_t client_socket
     else{
         std::cerr << "please set callback function ListenCB" << std::endl;
     }
+
 }
 
 bool XServerTask::Init()

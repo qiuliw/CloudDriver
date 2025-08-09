@@ -9,12 +9,17 @@
 
 #include "xthread_pool.h"
 #include "xserver_task.h"
+#include "xfile_server_task.h"
 
 
+
+// 新连接建立回调函数
 static void ListenCB(int sock,struct sockaddr *addr, int addrlen, void *arg){
     std::cout << "ListenCB in main" << std::endl;
+    auto task = new XFileServerTask();
+    task->set_sock(sock);
+    XThreadPool::Get()->Dispatch(task);
 }
-
 
 int main(int argc, char *argv[] ){
 
@@ -30,6 +35,7 @@ int main(int argc, char *argv[] ){
 
     int server_port = 20010;
     int thread_count = 10;
+
     if(argc > 1)
         server_port = atoi(argv[1]);
     if(argc > 2)
@@ -37,10 +43,10 @@ int main(int argc, char *argv[] ){
     if(argc == 1)
         std::cout << "Usage: " << argv[0] << " [server_port] [thread_count]" << std::endl;
 
-    // 初始化主线程池
+    // 初始化主线程池：全局共享，负责处理已连接的socket任务
     XThreadPool::Get()->Init(thread_count);
     
-    // 服务器分发连接的线程池
+    // 服务器分发连接的线程池：监听端口，分发连接，所以只初始化1个线程
     XThreadPool server_pool;
     server_pool.Init(1);
     auto task = new XServerTask();

@@ -18,5 +18,4 @@ void XDiskClient::GetDir()
     task->set_server_ip(server_ip_);
     task->set_server_port(server_port_);
     XThreadPool::Get()->Dispatch(task);
-
 }

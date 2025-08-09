@@ -11,9 +11,9 @@ static void SReadCB(struct bufferevent *bev, void *ctx){
     task->ReadCB();
 }
 static void SWriteCB(struct bufferevent *bev, void *ctx){
-    auto *task = (XComTask *)ctx;
-    task->WriteCB();
+
 }
+
 static void SEventCB(struct bufferevent *bev, short what, void *ctx){
     auto *task = (XComTask *)ctx;
     task->EventCB(what);
@@ -60,9 +60,13 @@ bool XComTask::Init()
 // 退出要处理缓冲内容
 void XComTask::EventCB(short what){
     cout << "XComTask::EventCB" << endl;
-    if (what & BEV_EVENT_CONNECTED){ // 连接成功
+    if (what & BEV_EVENT_CONNECTED){ // 连接成功，客户端主动建立连接时触发
         cout << "BEV_EVENT_CONNECTED" << endl;
-        bufferevent_write(bev_, "hello", 6);
+        auto msg = XMsg();
+        msg.type = MSG_GETDIR;
+        msg.data = (char *) "./";
+        msg.size = strlen(msg.data) + 1;
+        Write(&msg);
     }
     if (what & BEV_EVENT_ERROR || what & BEV_EVENT_TIMEOUT){ // 错误
         cout << "BEV_EVENT_ERROR or BEV_EVENT_TIMEOUT" << endl;
@@ -74,13 +78,73 @@ void XComTask::EventCB(short what){
     }
 }
 
+// libevent默认水平触发不用关心粘包，也可以外层加for(;;)阻塞读取
 void XComTask::ReadCB(){
-    cout << "XComTask::ReadCB" << endl;
-    bufferevent_read(bev_, read_buf_, sizeof read_buf_);
-    cout << read_buf_ << endl;
+    // 接受消息 XMsgHead
+
+    // 1.接受头部信息
+    if (!msg_.data){
+        int headsize = sizeof(XMsgHead);
+        int len = bufferevent_read(bev_, &msg_, headsize);
+        if (len != headsize){
+            cerr << "msg head recv error" << endl;
+            return;
+        }
+        // 验证消息头有效性
+        if (msg_.type >= MSG_MAX_TYPE || msg_.size < 0 || msg_.size > MSG_MAX_SIZE){
+            cerr << "msg head is error" << endl;
+            return;
+        }
+        msg_.data = new char[msg_.size]; // 连接突然断，也要释放内存
+    }
+    // 2.接受数据
+    int readsize = msg_.size - msg_.recved;
+    if (readsize <= 0){ //格式出错。 =0 表示接受完毕后还被触发，则直接返回
+        if (msg_.data)
+            delete msg_.data;
+        memset(&msg_, 0, sizeof(msg_));
+
+    }
+    int len = bufferevent_read(bev_, msg_.data + msg_.recved, msg_.size);
+    if (len <= 0){
+        return;
+    }
+    msg_.recved += len;
+    if (msg_.recved == msg_.size){
+        cout << "recv msg end" << endl;
+        Read(&msg_);
+        if (msg_.data)
+            delete msg_.data;
+        memset(&msg_, 0, sizeof(msg_));
+    }
+
 }
 
-void XComTask::WriteCB(){
-    cout << "XComTask::WriteCB" << endl;
-    bufferevent_write(bev_, write_buf_, strlen(write_buf_));
+bool XComTask::Write(const XMsg* msg){
+    if (!bev_ || !msg || !msg->data || msg->size <= 0)
+        return false;
+    // 1.写入消息头
+    int re = bufferevent_write(bev_, msg, sizeof(XMsgHead));
+    if (re != 0) return false;
+    // 2.写入数据内容
+    re = bufferevent_write(bev_, msg->data, msg->size);
+    return true;
+}
+
+
+// 接受消息的回调，由业务重载
+void XComTask::Read(const XMsg* msg){
+    cout << "msg->size: " << msg->size << endl;
+    cout << "msg->type: ";
+    switch (msg->type){
+        case MSG_GETDIR:
+            cout << "MSG_GETDIR" << endl;
+            break;
+        case MSG_DIRLIST:
+            cout << "MSG_DIRLIST" << endl;
+            break;
+        default:
+            cout << "other type " << msg_.type << endl;
+    }
+    cout << "msg->data: " << msg->data << endl;
 }

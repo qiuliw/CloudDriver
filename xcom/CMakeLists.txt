@@ -3,10 +3,24 @@ project(xcom)
 
 set(CMAKE_CXX_STANDARD 20)
 
-aux_source_directory(. SRC_LIST)
+#aux_source_directory(. SRC_LIST)
 
 ## 必须声明为动态库，默认静态库
-add_library(xcom SHARED ${SRC_LIST})
+add_library(xcom SHARED
+        xcom.h
+        xcom_task.cpp
+        xcom_task.h
+        xfile_server_task.cpp
+        xfile_server_task.h
+        xmsg.h
+        xtask.h
+        xthread.cpp
+        xthread.h
+        xthread_pool.cpp
+        xthread.h
+        xtools.cpp
+        xtools.h
+)
 
 # 指定 libevent 路径
 set(LIBEVENT_DIR "D:/Software/libevent-2.1.12-stable")

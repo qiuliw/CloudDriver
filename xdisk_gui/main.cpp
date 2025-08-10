@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
     // 初始化 socket库
     WSADATA wsa;
     WSAStartup(MAKEWORD(2,2), &wsa);
+    // 使用 Freetype作为字体引擎
+    qputenv("QT_QPA_PLATFORM", "windows:fontengine=freetype");
 #else
     // 使用断开连接socket，管道断开，会发出断开信号，导致程序退出
     if(signal(SIGPIPE, SIG_IGN) == SIG_ERR)

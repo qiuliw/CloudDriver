@@ -19,6 +19,7 @@ public:
 
 public slots:
     void Refresh();
+    void UpdateDir(std::string dirs);
     // 用户选择一个文件，插入到列表
     void Upload();
 

@@ -13,12 +13,8 @@ void XDirTask::Read(const XMsg* msg){
     switch (msg->type){
         case MSG_DIRLIST: // 服务器返回的目录列表
             cout << "MIS_DIRLIST" << endl;
-            if (dirCallback_){
+            if (dirCallback_)
                 dirCallback_(msg->data);
-                cout << "dirCallback_" << endl;
-            }else{
-                cout << "dirCallback_ is null" << endl;
-            }
             break;
     }
 }
@@ -26,7 +22,8 @@ void XDirTask::Read(const XMsg* msg){
 void XDirTask::ConnectedCB(){
     XMsg msg;
     msg.type = MSG_GETDIR;
-    msg.size = 3;
-    msg.data = (char *)"./";
+    msg.size = server_root().size() + 1;
+    msg.data =(char *)server_root_.c_str();
+    cout << "ConnectedCB" << msg.size <<  msg.data  << endl;
     Write(&msg);
 }

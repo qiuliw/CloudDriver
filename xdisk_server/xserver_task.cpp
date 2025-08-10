@@ -3,7 +3,7 @@
 #include <event2/event.h>
 #include <event2/listener.h>
 #include <iostream>
-#include <winsock2.h>
+#include <cstring>
 #include <xfile_server_task.h>
 
 

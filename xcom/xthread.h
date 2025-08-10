@@ -4,7 +4,7 @@
 #include <thread>
 #include <mutex>
 
-#include "XTask.h"
+#include "xtask.h"
 #include "xcom.h"
 
 class XThread {

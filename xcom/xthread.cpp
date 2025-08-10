@@ -1,6 +1,6 @@
 ﻿
-#include "XThread.h"
-#include "XTask.h"
+#include "xthread.h"
+#include "xtask.h"
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
@@ -14,6 +14,7 @@
 #include <event2/util.h>
 #else
 #include <sys/eventfd.h>
+#include <unistd.h>
 #endif
 
 // 激活线程任务的回调函数

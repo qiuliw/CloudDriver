@@ -1,5 +1,5 @@
 ﻿#include "xthread_pool.h"
-#include "XThread.h"
+#include "xthread.h"
 #include <iostream>
 XThreadPool::XThreadPool() {
 }

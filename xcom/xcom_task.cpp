@@ -1,6 +1,7 @@
 ﻿#include "xcom_task.h"
 
 #include <event2/bufferevent.h>
+#include <string.h>
 #include <iostream>
 #include <event2/event.h>
 using namespace std;

@@ -11,13 +11,12 @@
 
 ## Third Party
 
-**windows**
+**windows**: msvc
+**linux**: mingw
 
 - openssl-3.5.1
 - libevent-2.1.12-stable
 - zlib-1.3.1
-
-> cmakelists使用的MSVC动态库生成和硬链接
 
 
 ## 图图

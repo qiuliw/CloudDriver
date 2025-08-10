@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.29)
+﻿cmake_minimum_required(VERSION 3.22)
 
 project(CloudDriver)
 
@@ -14,6 +14,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/bin)
 
 add_subdirectory(xcom)
-add_subdirectory(xdisk_gui)  
+if(WIN32)
+add_subdirectory(xdisk_gui) # 客户端只编译WIN的
+endif()
 add_subdirectory(xdisk_server)
 

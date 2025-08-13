@@ -73,15 +73,14 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(xdisk_gui)
 endif()
 
-
-include_directories(
-        "${PROJECT_SOURCE_DIR}/../xcom"
-        # 查找UI_XXX.h 文件
-        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_autogen/include # Qt UI 自动生成的头文件路径
+target_include_directories(xdisk_gui
+        PUBLIC
+#        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${OPENSSL_INCLUDE_DIR}
 )
 
 target_link_libraries(xdisk_gui PRIVATE
-        "${PROJECT_SOURCE_DIR}/../lib/xcom.lib"
-        ws2_32
+    xcom
+    ws2_32
 )
 

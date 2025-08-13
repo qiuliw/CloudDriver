@@ -13,6 +13,13 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/bin)
 
+# 添加cmake模块搜索路径
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+# 找第三方库（通过自定义 FindXXX.cmake）
+find_package(OpenSSL REQUIRED)
+find_package(Libevent REQUIRED)
+
 add_subdirectory(xcom)
 if(WIN32)
 add_subdirectory(xdisk_gui) # 客户端只编译WIN的

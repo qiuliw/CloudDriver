@@ -1,6 +1,6 @@
-#find_library(LIBEVENT_CORE_LIBRARY NAMES event_core)
-#find_library(LIBEVENT_LIBRARY NAMES event)
-#find_library(LIBEVENT_EXTRA_LIBRARY NAMES event_extra)
+find_library(LIBEVENT_CORE_LIBRARY NAMES event_core)
+find_library(LIBEVENT_LIBRARY NAMES event)
+find_library(LIBEVENT_EXTRA_LIBRARY NAMES event_extra)
 
 if(LIBEVENT_INCLUDE_DIR AND LIBEVENT_LIBRARY)
     set(LIBEVENT_LIBRARIES

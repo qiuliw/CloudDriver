@@ -10,6 +10,8 @@ add_executable(xdisk_server ${SRC_LIST})
 target_include_directories(xdisk_server
         PUBLIC
 #        ${CMAKE_CURRENT_SOURCE_DIR}
+        PRIVATE
+        ${LIBEVENT_INCLUDE_DIR}
         ${OPENSSL_INCLUDE_DIR}
 )
 

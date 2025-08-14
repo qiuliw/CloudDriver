@@ -10,15 +10,34 @@
 
 using namespace std;
 
+void XFileServerTask::ReadCB(){
+    if (parse_ == Parse_None){
+        cout << "解析消息包" << endl;
+        XComTask::ReadCB();
+    }
+    else if (parse_ == Parse_OK) {
+        cout << "接受文件" << endl;
+        ReadFile();
+    }
+}
+
 void XFileServerTask::Read(const XMsg* msg){
     switch (msg->type){
         case MSG_GETDIR:
             cout << "MSG_GETDIR" << endl;
             GetDir(msg);
             break;
+        case MSG_UPLOAD:
+            Upload(msg);
         default:
             break;
     }
+}
+
+// 当包消息接收完毕时调用
+void XFileServerTask::ReadFile(){
+
+    parse_ = Parse_None;
 }
 
 // 处理目录获取的消息，返回目录列表
@@ -36,4 +55,16 @@ void XFileServerTask::GetDir(const XMsg* msg){
     resmsg.data = (char *)dir.c_str();
     resmsg.size = dir.size() + 1;
     Write(&resmsg);
+}
+
+void XFileServerTask::Upload(const XMsg* msg){
+    if (!msg->data || !msg || msg->size <= 0) return;
+    string str = msg->data;
+    if (str.empty()) return;
+    int pos = str.find_last_of(",");
+    if (pos <= 0) return;
+    string filename = str.substr(0, pos);
+    if (pos + 1 >= str.size()) return;
+    string tmp = str.substr(pos + 1, str.size() - pos - 1);
+    cout << "filename:" << filename << " size:" << tmp << endl;
 }

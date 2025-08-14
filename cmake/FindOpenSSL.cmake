@@ -1,6 +1,3 @@
-# 尝试先用系统的 OpenSSL
-#find_package(OpenSSL QUIET MODULE)
-
 if(NOT OpenSSL_FOUND)
     message(STATUS "OpenSSL not found via system search, using manual config.")
 

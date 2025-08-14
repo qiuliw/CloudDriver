@@ -22,9 +22,12 @@ public:
      * @param path 目录路径
      */
     void GetDir(); // 获取服务器根路径下的文件列表
+    void Upload(std::string path);
+
     void set_server_ip(std::string& ip) { server_ip_ = ip; }
     void set_server_port(int port) { server_port_ = port; }
     void set_server_root(std::string& root) { server_root_ = root; }
+
 
 signals:
     void SDir(std::string dirs);

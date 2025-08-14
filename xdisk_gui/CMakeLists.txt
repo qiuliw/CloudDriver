@@ -21,6 +21,8 @@ set(PROJECT_SOURCES
         xdisk_client.h
         xdir_task.h
         xdir_task.cpp
+        XUploadTask.cpp
+        XUploadTask.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -8,6 +8,7 @@ enum MsgType {
     MSG_NONE = 0,
     MSG_GETDIR, // 请求目录
     MSG_DIRLIST, // 返回目录列表
+    MSG_UPLOAD, // 请求文件
     MSG_MAX_TYPE, // 用来验证类型正确，枚举最大值
 };
 

@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 aux_source_directory(. SRC_LIST)
 
 ## 必须声明为动态库，默认静态库
-add_library(xcom SHARED ${SRC_LIST})
+add_library(xcom SHARED ${SRC_LIST}
+        Logger.h)
 
 ## 污染作用域
 #include_directories(

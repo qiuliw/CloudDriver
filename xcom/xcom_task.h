@@ -7,6 +7,12 @@
 
 struct bufferevent;
 
+enum Parse{
+    Parse_None = 0,
+    Parse_ING,
+    Parse_OK,
+    Parse_ERR,
+};
 
 // 待优化：使用可调用对象替代任务子类。将业务逻辑与任务逻辑解耦
 
@@ -17,11 +23,14 @@ public:
     XComTask(){};
 
     bool Init() override;
-    virtual void EventCB(short what);
-    void ReadCB(); // 读取数据包并调用数据处理函数
     virtual void ConnectedCB(); // 连接成功的消息回调，由业务类重载
+    // 回调写
+    virtual void WriteCB(); // 低水位回调
+    virtual void EventCB(short what);
+    virtual void ReadCB(); // 解析消息得到数据包给业务函数处理
     virtual void Read(const XMsg* msg); // 具体的数据处理函数
-    virtual bool Write(const XMsg* msg);
+    // 直接写
+    virtual bool Write(const XMsg* msg); // 写入缓冲区
 
     std::string server_ip() { return server_ip_; }
     int server_port() { return server_port_; }
@@ -37,4 +46,7 @@ protected:
     int server_port_ = 0; // 服务器端口
 
     XMsg msg_;// 数据包缓存
+    Parse parse_ = Parse_None;
+
+
 };

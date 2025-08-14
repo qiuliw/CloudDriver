@@ -17,6 +17,8 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+    void UpdateServerInfo();
+
 public slots:
     void Refresh();
     void UpdateDir(std::string dirs);

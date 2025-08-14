@@ -11,8 +11,11 @@ static void SReadCB(struct bufferevent *bev, void *ctx){
     auto *task = (XComTask *)ctx;
     task->ReadCB();
 }
-static void SWriteCB(struct bufferevent *bev, void *ctx){
 
+// bufferevent_write直接写是数据发送的起点，而写回调是发送完成的终点。​写回调触发条件​：当输出缓冲区数据量低于写低水位标记（默认值为 0，即缓冲区为空时触发）
+static void SWriteCB(struct bufferevent *bev, void *ctx){
+    auto *task = (XComTask *)ctx;
+    task->WriteCB();
 }
 
 static void SEventCB(struct bufferevent *bev, short what, void *ctx){
@@ -60,7 +63,7 @@ bool XComTask::Init()
 
 // 退出要处理缓冲内容
 void XComTask::EventCB(short what){
-    cout << "XComTask::EventCB" << endl;
+    // 只有客户端主动连接成功才会触发
     if (what & BEV_EVENT_CONNECTED){ // 连接成功，客户端主动建立连接时触发
         ConnectedCB();
     }
@@ -80,6 +83,7 @@ void XComTask::ReadCB(){
 
     // 1.接受头部信息
     if (!msg_.data){
+        parse_ = Parse_ING;
         int headsize = sizeof(XMsgHead);
         int len = bufferevent_read(bev_, &msg_, headsize);
         if (len != headsize){
@@ -99,7 +103,7 @@ void XComTask::ReadCB(){
         if (msg_.data)
             delete msg_.data;
         memset(&msg_, 0, sizeof(msg_));
-
+        parse_ = Parse_ERR;
     }
     int len = bufferevent_read(bev_, msg_.data + msg_.recved, msg_.size);
     if (len <= 0){
@@ -108,22 +112,25 @@ void XComTask::ReadCB(){
     msg_.recved += len;
     if (msg_.recved == msg_.size){
         cout << "recv msg end" << endl;
+        parse_ = Parse_OK;
         Read(&msg_);
         if (msg_.data)
             delete msg_.data;
         memset(&msg_, 0, sizeof(msg_));
+        parse_ = Parse_ERR;
     }
 
 }
 
 // 连接成功回调
 void XComTask::ConnectedCB(){
-    XMsg msg;
-    msg.type = MSG_DIRLIST;
-    msg.data = (char*) "OK";
-    msg.size = strlen(msg.data) + 1;
-    Write(&msg);
+    cout << "连接成功回调" << endl;
 }
+
+void XComTask::WriteCB(){
+    cout << "缓冲区低水位回调" << endl;
+}
+
 
 bool XComTask::Write(const XMsg* msg){
     if (!bev_ || !msg || !msg->data || msg->size <= 0)

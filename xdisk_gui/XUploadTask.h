@@ -17,6 +17,11 @@ public:
     // 读取消息的回调
     virtual void Read(const XMsg* msg) override;
 
+    void WriteCB() override;
+
+    void sendFile();
+    void WriteStr(MsgType type, const std::string& str);
+
     void setFilePath(std::string path){
         filePath_ = path;
     }
@@ -24,9 +29,12 @@ private:
     // 需要上传的文件路径
     std::string filePath_ = "";
     int fileSize_ = 0;
+    int sendPos_ = 0;
 
     // 读取文件
     std::ifstream ifs_;
+
+    bool readySend = false;
 };
 
 #endif //XUPLOADTASK_H

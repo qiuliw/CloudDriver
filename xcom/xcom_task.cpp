@@ -117,7 +117,6 @@ void XComTask::ReadCB(){
         if (msg_.data)
             delete msg_.data;
         memset(&msg_, 0, sizeof(msg_));
-        parse_ = Parse_ERR;
     }
 
 }
@@ -141,6 +140,10 @@ bool XComTask::Write(const XMsg* msg){
     // 2.写入数据内容
     re = bufferevent_write(bev_, msg->data, msg->size);
     return true;
+}
+
+int XComTask::Write(const char* data, int size){
+    return bufferevent_write(bev_, data, size);
 }
 
 

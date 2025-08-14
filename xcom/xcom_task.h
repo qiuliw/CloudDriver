@@ -25,12 +25,13 @@ public:
     bool Init() override;
     virtual void ConnectedCB(); // 连接成功的消息回调，由业务类重载
     // 回调写
-    virtual void WriteCB(); // 低水位回调
+    virtual void WriteCB(); // 低水位回调，只会在缓冲区水位变化为低水位时触发一次。
     virtual void EventCB(short what);
     virtual void ReadCB(); // 解析消息得到数据包给业务函数处理
     virtual void Read(const XMsg* msg); // 具体的数据处理函数
     // 直接写
     virtual bool Write(const XMsg* msg); // 写入缓冲区
+    virtual int Write(const char* data, int size); // 直接写入缓冲区
 
     std::string server_ip() { return server_ip_; }
     int server_port() { return server_port_; }

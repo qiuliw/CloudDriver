@@ -4,6 +4,7 @@
 #include <string.h>
 #include <iostream>
 #include <event2/event.h>
+#include "Logger.h"
 using namespace std;
 
 // 由静态函数中转为成员函数
@@ -63,17 +64,31 @@ bool XComTask::Init()
 
 // 退出要处理缓冲内容
 void XComTask::EventCB(short what){
+    LOG_INFO("EventCB called with what: %d", what);
     // 只有客户端主动连接成功才会触发
     if (what & BEV_EVENT_CONNECTED){ // 连接成功，客户端主动建立连接时触发
+        LOG_INFO("Connection established successfully");
         ConnectedCB();
     }
-    if (what & BEV_EVENT_ERROR || what & BEV_EVENT_TIMEOUT){ // 错误
-        cout << "BEV_EVENT_ERROR or BEV_EVENT_TIMEOUT" << endl;
+    if (what & BEV_EVENT_ERROR || what & BEV_EVENT_TIMEOUT){ // 错误或连接超时
+        LOG_INFO("BEV_EVENT_ERROR or BEV_EVENT_TIMEOUT");
         bufferevent_free(bev_);
+        bev_ = nullptr;
+        // 清空回调函数，避免悬空指针，避免依旧被base回调触发。
+        ClearCallbacks();
+        // 连接错误，删除任务对象
+        delete this;
+        return;
     }
     if (what & BEV_EVENT_EOF){ // 对方关闭连接
-        cout << "BEV_EVENT_EOF" << endl;
+        LOG_INFO("BEV_EVENT_EOF - connection closed by peer");
         bufferevent_free(bev_);
+        bev_ = nullptr;
+        // 清空回调函数，避免悬空指针
+        ClearCallbacks();
+        // 连接关闭，删除任务对象
+        delete this;
+        return;
     }
 }
 
@@ -137,13 +152,27 @@ bool XComTask::Write(const XMsg* msg){
     // 1.写入消息头
     int re = bufferevent_write(bev_, msg, sizeof(XMsgHead));
     if (re != 0) return false;
-    // 2.写入数据内容
+    // 2.写入数据内容 - bufferevent_write会复制数据到内部缓冲区
     re = bufferevent_write(bev_, msg->data, msg->size);
-    return true;
+    return re == 0;
 }
 
 int XComTask::Write(const char* data, int size){
     return bufferevent_write(bev_, data, size);
+}
+
+// 安全的消息发送函数
+bool XComTask::WriteMessage(MsgType type, const std::string& data) {
+    if (!bev_) return false;
+    
+    // 构造XMsg结构，直接使用string的数据
+    XMsg msg;
+    msg.type = type;
+    msg.data = (char*)data.c_str();
+    msg.size = data.size() + 1;
+    
+    // 发送消息 - bufferevent_write会自动复制数据到内部缓冲区
+    return Write(&msg);
 }
 
 

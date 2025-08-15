@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include <qobject.h>
 #include <string>
-class XDiskClient : public QObject
-{
-    Q_OBJECT
+#include <QObject>
 
+class XDiskClient : public QObject{
+    Q_OBJECT
+    
 public:
     // 单例
     static XDiskClient* Get()
@@ -13,6 +13,7 @@ public:
         static XDiskClient xc;
         return &xc;
     }
+    
     // 初始化，包括线程池
     bool Init();
 
@@ -28,15 +29,13 @@ public:
     void set_server_port(int port) { server_port_ = port; }
     void set_server_root(std::string& root) { server_root_ = root; }
 
-
 signals:
     void SDir(std::string dirs);
 
 private:
-    XDiskClient(){};
+    XDiskClient() : QObject(nullptr) {};
 
     std::string server_ip_ = ""; // 服务器IP
     int server_port_ = 0; // 服务器端口
     std::string server_root_ = ""; // 服务器根目录 
-
 };

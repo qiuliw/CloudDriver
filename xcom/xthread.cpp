@@ -148,7 +148,14 @@ bool XThread::Run() {
     task = tasks_.front(); // 先进先出
     tasks_.pop_front();
     lk.unlock();
+    
+    // 执行任务
     task->Init();
+    
+    // 注意：不在这里删除任务对象
+    // 任务对象会在连接关闭或任务完成后自己清理
+    // 这样可以避免回调函数访问已删除的对象
+    
     return true;
 }
 

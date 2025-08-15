@@ -1,6 +1,8 @@
 #pragma once
 #include <functional>
 #include <string>
+#include <vector>
+#include <memory>
 #include "xcom.h"
 #include "xtask.h"
 #include "xmsg.h"
@@ -49,5 +51,9 @@ protected:
     XMsg msg_;// 数据包缓存
     Parse parse_ = Parse_None;
 
-
+    // 安全的消息发送函数
+    bool WriteMessage(MsgType type, const std::string& data);
+    
+    // 清空回调函数，避免悬空指针
+    virtual void ClearCallbacks() {}
 };

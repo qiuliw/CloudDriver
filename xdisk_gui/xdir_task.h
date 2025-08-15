@@ -24,6 +24,12 @@ public:
     std::string server_root(){
         return server_root_;
     }
+    
+protected:
+    void ClearCallbacks() override {
+        dirCallback_ = nullptr; // 清空回调函数
+    }
+    
 private:
     std::string server_root_;
     // 获取目录后调用的回调

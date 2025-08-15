@@ -1,6 +1,5 @@
 ﻿#include "xdisk_client.h"
 #include <iostream>
-#include "xcom_task.h"
 #include "xdir_task.h"
 #include "xthread_pool.h"
 #include "XUploadTask.h"
@@ -22,16 +21,17 @@ void XDiskClient::GetDir()
     task->set_server_ip(server_ip_);
     task->set_server_port(server_port_);
     task->set_server_root(server_root_);
-    // 2. 视图更新回调
-    task->setDirCallback([this](std::string dirs)->void{
-        LOG_INFO("client getDirq, emit SDir signal");
-        SDir(dirs); // 视图更新信号
+    // 2. 视图更新回调 - 使用lambda但不捕获this
+    task->setDirCallback([](std::string dirs)->void{
+        LOG_INFO("client getDir, emit SDir signal");
+        // 使用全局函数或静态函数来发送信号
+        XDiskClient::Get()->SDir(dirs);
     });
     XThreadPool::Get()->Dispatch(task);
 }
 
 void XDiskClient::Upload(std::string path){
-    LOG_INFO("client upload file path:", path);
+    LOG_INFO("client upload file path: %s", path.c_str());
     auto task = new XUploadTask();
     task->set_server_ip(server_ip_);
     task->set_server_port(server_port_);

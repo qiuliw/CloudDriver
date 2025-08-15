@@ -2,6 +2,7 @@
 
 #include <fstream>
 
+#include "Logger.h"
 #include "xcom.h"
 #include "xcom_task.h"
 
@@ -23,9 +24,13 @@ private:
     // 收到消息包后，再读取消息就是纯数据
     void RecvFile();
 
+    // 处理客户端的下载请求
+    void Download(const XMsg *msg);
+
     void WriteStr(MsgType, const std::string&);
 
     std::string serverPath_ = "./";
+    std::string filePath_ = "";
 
     bool isRecv_ = false;
     int fileSize_ = 0;
@@ -34,6 +39,7 @@ private:
 
     std::ifstream ifs_;
     std::ofstream ofs_;
+
 };
 
 

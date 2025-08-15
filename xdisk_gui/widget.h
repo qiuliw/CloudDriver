@@ -24,6 +24,8 @@ public slots:
     void UpdateDir(std::string dirs);
     // 用户选择一个文件，插入到列表
     void Upload();
+    // 用户选择一个文件进行下载
+    void Download();
 
 private:
     Ui::Widget *ui;

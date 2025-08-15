@@ -12,17 +12,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+aux_source_directory(. SRC_LIST)
+
 set(PROJECT_SOURCES
-        main.cpp
-        widget.cpp
-        widget.h
-        widget.ui
-        xdisk_client.cpp
-        xdisk_client.h
-        xdir_task.h
-        xdir_task.cpp
-        XUploadTask.cpp
-        XUploadTask.h
+    ${SRC_LIST}
+    XDownloadTask.cpp
+    XDownloadTask.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -75,14 +70,14 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(xdisk_gui)
 endif()
 
-target_include_directories(xdisk_gui
-        PUBLIC
-#        ${CMAKE_CURRENT_SOURCE_DIR}
+
+target_include_directories(xdisk_gui PRIVATE
         ${OPENSSL_INCLUDE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_autogen/include_$<CONFIG>  # UI.H 头文件路径
+        
 )
 
 target_link_libraries(xdisk_gui PRIVATE
     xcom
     ws2_32
 )
-

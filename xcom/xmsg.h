@@ -11,6 +11,10 @@ enum MsgType {
     MSG_UPLOAD, // 请求上传文件
     MSG_UPLOAD_ACCEPT, // 服务端准备好接受文件,
     MSG_UPLOAD_COMPLETE, // 服务端接受文件结束
+    MSG_DOWNLOAD, // 请求下载文件
+    MSG_DOWNLOAD_ACCEPT, // 服务端准备好发送文件
+    MSG_DOWNLOAD_COMPLETE, // 服务端发送文件结束
+    MSG_ERROR, // 错误消息类型
     MSG_MAX_TYPE, // 用来验证类型正确，枚举最大值
 };
 

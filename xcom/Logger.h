@@ -22,7 +22,6 @@ do { \
     printf("[ERROR] "); \
     printf(fmt, ##__VA_ARGS__); \
     printf("\n"); \
-    exit(-1); \
 } while(0)
 
 #define LOG_FATAL(fmt, ...) \

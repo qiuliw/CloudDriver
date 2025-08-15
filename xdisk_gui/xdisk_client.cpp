@@ -3,6 +3,7 @@
 #include "xdir_task.h"
 #include "xthread_pool.h"
 #include "XUploadTask.h"
+#include "XDownloadTask.h"
 #include <iostream>
 
 #include "Logger.h"
@@ -36,5 +37,15 @@ void XDiskClient::Upload(std::string path){
     task->set_server_ip(server_ip_);
     task->set_server_port(server_port_);
     task->setFilePath(path);
+    XThreadPool::Get()->Dispatch(task);
+}
+
+void XDiskClient::Download(const std::string& filename, const std::string& savePath) {
+    LOG_INFO("client download file: %s to %s", filename.c_str(), savePath.c_str());
+    auto task = new XDownloadTask();
+    task->set_server_ip(server_ip_);
+    task->set_server_port(server_port_);
+    task->setFileName(filename);
+    task->setSavePath(savePath);
     XThreadPool::Get()->Dispatch(task);
 }

@@ -39,6 +39,19 @@
     <string>上传</string>
    </property>
   </widget>
+    <widget class="QPushButton" name="downloadButton">
+     <property name="geometry">
+        <rect>
+         <x>540</x>
+         <y>340</y>
+         <width>111</width>
+         <height>41</height>
+        </rect>
+     </property>
+     <property name="text">
+        <string>下载</string>
+     </property>
+    </widget>
   <widget class="QTableWidget" name="fileListWidget">
    <property name="geometry">
     <rect>
@@ -124,7 +137,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>./server_root</string>
+    <string>./</string>
    </property>
   </widget>
   <widget class="QLabel" name="pathLabel">
@@ -175,9 +188,26 @@
     </hint>
    </hints>
   </connection>
+    <connection>
+     <sender>downloadButton</sender>
+     <signal>clicked()</signal>
+     <receiver>Widget</receiver>
+     <slot>Download()</slot>
+     <hints>
+        <hint type="sourcelabel">
+         <x>599</x>
+         <y>350</y>
+        </hint>
+        <hint type="destinationlabel">
+         <x>636</x>
+         <y>370</y>
+        </hint>
+     </hints>
+    </connection>
  </connections>
  <slots>
   <slot>Refresh()</slot>
   <slot>Upload()</slot>
+    <slot>Download()</slot>
  </slots>
 </ui>
